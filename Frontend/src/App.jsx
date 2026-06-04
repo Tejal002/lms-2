@@ -39,7 +39,7 @@ function App() {
           </Route>
 
           <Route path='/'>
-            <Route index element={<MainPage />} />
+            <Route index element={<Login />} />
             <Route path='course-details/:courseId' element={<CourseDetails />}></Route>
           </Route>
 
