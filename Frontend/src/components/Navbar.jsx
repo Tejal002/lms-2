@@ -6,7 +6,13 @@ import { useLogoutUserMutation } from './apis/authApi.js';
 import { Toaster, toast } from "react-hot-toast"
 
 const Navbar = () => {
+    const navigate=useNavigate()
     const user = useSelector((state) => state.auth.user);
+    if(!user){
+        toast.error("login first!");
+        navigate("/auth");
+        
+    }
     const [logoutUser] = useLogoutUserMutation();
     const dispatch = useDispatch()
     const navigate = useNavigate()
