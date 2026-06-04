@@ -15,6 +15,7 @@ export function ProtectedRoute({ children }) {
 
     useEffect(() => {
         if (isLoading) return;
+        console.log(data);
         if (data) dispatch(loginSlice(data));
         if (error) dispatch(logoutSlice());
     }, [isLoading, data, error, dispatch])
