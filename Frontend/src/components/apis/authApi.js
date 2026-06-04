@@ -1,6 +1,6 @@
 import { current } from '@reduxjs/toolkit';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-const BACKEND_URL="http://localhost:3000";
+const BACKEND_URL="https://lms-2-2mmz.onrender.com/";
 
 
 export const authApi = createApi({
