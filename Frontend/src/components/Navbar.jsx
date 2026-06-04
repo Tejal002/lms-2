@@ -51,7 +51,7 @@ const Navbar = () => {
                             <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" class="h-8 w-auto" />
                         </div>
                         <div class="hidden sm:ml-6 sm:block">
-                            {user?.role === "student" ?
+                            {(!user || user?.role === "student") ?
                                 (<div class="flex space-x-4">
                                     <Link to="/student-dashboard" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Dashboard</Link>
                                     <Link to="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</Link>
