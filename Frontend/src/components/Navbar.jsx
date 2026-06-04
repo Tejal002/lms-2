@@ -4,15 +4,20 @@ import { Link, useNavigate } from 'react-router-dom'
 import { logoutSlice } from './slices/authSlice.js';
 import { useLogoutUserMutation } from './apis/authApi.js';
 import { Toaster, toast } from "react-hot-toast"
+import { useEffect } from 'react';
 
 const Navbar = () => {
     const navigate=useNavigate()
     const user = useSelector((state) => state.auth.user);
-    if(!user){
+    
+    useEffect(()=>{
+         if(!user){
         toast.error("login first!");
         navigate("/auth");
-        
+
     }
+    },[])
+   
     const [logoutUser] = useLogoutUserMutation();
     const dispatch = useDispatch()
     const navigate = useNavigate()
