@@ -66,7 +66,11 @@ function App() {
             
             }>
             <Route index element={<InstructorDashboardDetails/>}/>
-            <Route path='create-course' element={<CreateCourse/>}/>
+            <Route path='create-course' element={
+              <InstructorRoute>
+                 <CreateCourse/>
+              </InstructorRoute>
+             }/>
             <Route path='manage-course' element={<ManageCourse/>}/>
             
          </Route>
