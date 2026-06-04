@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom';
 export function ProtectedRoute({ children }) {
     const dispatch = useDispatch()
     const user = useSelector(state => state.auth.user);
-
+    console.log(user)
     const { data, error, isLoading } = useCurrentUserQuery(undefined, {
         skip: !user,
         refetchOnMountOrArgChange: true
