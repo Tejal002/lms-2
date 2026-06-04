@@ -59,7 +59,12 @@ function App() {
           </Route>
 
           {/* // <InstructorRoute> */}
-          <Route path='/instructor-dashboard' element={<InstructorDashboard/>}>
+          <Route path='/instructor-dashboard' element={
+            <InstructorRoute>
+              <InstructorDashboard/>
+            </InstructorRoute>
+            
+            }>
             <Route index element={<InstructorDashboardDetails/>}/>
             <Route path='create-course' element={<CreateCourse/>}/>
             <Route path='manage-course' element={<ManageCourse/>}/>
