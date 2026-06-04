@@ -6,7 +6,7 @@ import { Navigate } from 'react-router-dom';
 
 export function ProtectedRoute({ children }) {
     const dispatch = useDispatch()
-    const user = useSelector(state => state.auth.user);
+   const user = useSelector((state) => state.auth.user);
     console.log(user)
     const { data, error, isLoading } = useCurrentUserQuery(undefined, {
         skip: !user,
@@ -19,6 +19,10 @@ export function ProtectedRoute({ children }) {
         if (data) dispatch(loginSlice(data));
         if (error) dispatch(logoutSlice());
     }, [isLoading, data, error, dispatch])
+
+    console.log("err",error);
+    console.log("user",user);
+    console.log("data",data);
 
     if (!user && error) {
         return <Navigate to="/auth" replace></Navigate>
