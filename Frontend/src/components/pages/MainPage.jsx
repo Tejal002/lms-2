@@ -3,6 +3,7 @@ import Navbar from '../Navbar'
 import Skeleton from './Utility-Skeleton/Skeleton'
 import CourseCard from '../CourseCard'
 import { useFetchCoursesQuery } from '../apis/courseApi'
+import { Link } from 'react-router-dom'
 
 const MainPage = () => {
 
