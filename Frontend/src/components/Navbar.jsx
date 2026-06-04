@@ -10,13 +10,6 @@ const Navbar = () => {
     const navigate=useNavigate()
     const user = useSelector((state) => state.auth.user);
     
-    useEffect(()=>{
-         if(!user){
-        toast.error("login first!");
-        navigate("/auth");
-
-    }
-    },[])
    
     const [logoutUser] = useLogoutUserMutation();
     const dispatch = useDispatch()
