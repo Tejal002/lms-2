@@ -40,8 +40,8 @@ const MainPage = () => {
 
 
 
-                         <Link to={"/auth/register"} className='text-amber-100 font-medium'>Register </Link>
-                        <Link to={"/auth"} className='text-amber-100 font-medium'>Login </Link>
+                         <Link to={"/auth/register"} className='text-black  font-medium'>Register </Link>
+                        <Link to={"/auth"} className='text-100 font-medium'>Login </Link>
 
 
 
