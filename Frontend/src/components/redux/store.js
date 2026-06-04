@@ -5,7 +5,7 @@ import courseApi from '../apis/courseApi'
 import enrollmentApi from '../apis/enrollmentApi'
 import lectureApi from '../apis/lectureApi'
 import authReducer from "../slices/authSlice.js"
-import { geminiApi } from '../apis/aiApi.js'
+
 
 export const store = configureStore({
   reducer: {

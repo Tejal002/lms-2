@@ -20,7 +20,7 @@ const Navbar = () => {
    
     const [logoutUser] = useLogoutUserMutation();
     const dispatch = useDispatch()
-    const navigate = useNavigate()
+   
     console.log(user);
 
     async function logoutFun() {
