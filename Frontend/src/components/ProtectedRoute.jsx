@@ -19,7 +19,7 @@ export function ProtectedRoute({ children }) {
         if (error) dispatch(logoutSlice());
     }, [isLoading, data, error, dispatch])
 
-    if (!user) {
+    if (!user && error) {
         return <Navigate to="/auth" replace></Navigate>
     }
 
