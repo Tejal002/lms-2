@@ -31,7 +31,7 @@ export async function fetchLectureByIdService(id) {
     }
     console.log(id, "id from service")
     const lec = await Lecture.findOne({ _id: id });
-    if(!lec){
+    if (!lec) {
         throw new Error("Lecture not found!");
     }
     return lec
@@ -43,20 +43,50 @@ export async function fetchLectureByCourseIDService(courseId) {
         throw new Error("Course Id is not defined!");
     }
 
-    const lectures= await Lecture.find({ course: courseId });
-    
-   
-   
-     return Promise.all(lectures.map(async (lec) => {
-        const transcripts = await fetchTranscript(lec.videoUrl);
-        const transcript = transcripts.reduce((prev, current) => ({ text: prev.text + ' ' + current.text }));
-        
-        return { ...lec.toObject(), transcript }
-    }))
+    const lectures = await Lecture.find({ course: courseId });
+
+    return Promise.all(
+        lectures.map(async (lec) => {
+
+
+            if (lec.transcript?.text) {
+                return lec.toObject();
+            }
+
+            
+            let transcriptText = "";
+
+            try {
+                const transcripts = await fetchTranscript(lec.videoUrl);
+
+                transcriptText = transcripts
+                    ?.map(t => t.text)
+                    .join(" ") || "";
+
+              
+                await Lecture.findByIdAndUpdate(lec._id, {
+                    transcript: {
+                        text: transcriptText,
+                        fetchedAt: new Date()
+                    }
+                });
+
+            } catch (err) {
+                console.log("Transcript fetch failed:", lec._id);
+            }
+
+            return {
+                ...lec.toObject(),
+                transcript: {
+                    text: transcriptText
+                }
+            };
+        })
+    );
 }
 
 export async function updateLectureService(id, updates) {
-    const lecture = await Lecture.findOne({_id:id});
+    const lecture = await Lecture.findOne({ _id: id });
 
     const allowedFields = ["title", "description", "videoUrl", "duration"];
 

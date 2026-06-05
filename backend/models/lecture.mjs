@@ -22,7 +22,12 @@ const lectureSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Course'
     },
-   
+
+    transcript: {
+        text: String,
+        fetchedAt: Date
+    }
+
 }, { timestamps: true })
 
 const Lecture = mongoose.model('Lecture', lectureSchema);
