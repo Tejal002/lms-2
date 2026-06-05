@@ -48,22 +48,36 @@ export async function fetchLectureByCourseIDService(courseId) {
     return Promise.all(
         lectures.map(async (lec) => {
 
-
+            
             if (lec.transcript?.text) {
                 return lec.toObject();
             }
 
-            
             let transcriptText = "";
 
             try {
-                const transcripts = await fetchTranscript(lec.videoUrl);
+               
+                const videoId = lec.videoUrl?.match(/v=([^&]+)/)?.[1];
 
-                transcriptText = transcripts
-                    ?.map(t => t.text)
-                    .join(" ") || "";
+                if (!videoId) {
+                    throw new Error("Invalid YouTube URL");
+                }
 
-              
+                const transcripts = await fetchTranscript(videoId);
+
+               
+                console.log("videoId:", videoId);
+                console.log("transcripts:", transcripts);
+
+                transcriptText =
+                    transcripts?.map(t => t.text).join(" ") || "";
+
+                
+                if (!transcriptText.trim()) {
+                    transcriptText = "Transcript not available for this lecture.";
+                }
+
+               
                 await Lecture.findByIdAndUpdate(lec._id, {
                     transcript: {
                         text: transcriptText,
@@ -72,7 +86,9 @@ export async function fetchLectureByCourseIDService(courseId) {
                 });
 
             } catch (err) {
-                console.log("Transcript fetch failed:", lec._id);
+                console.log("Transcript fetch failed:", lec._id, err.message);
+
+                transcriptText = "Transcript not available for this lecture.";
             }
 
             return {
