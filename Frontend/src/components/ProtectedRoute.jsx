@@ -17,14 +17,15 @@ export function ProtectedRoute({ children }) {
         if (isLoading) return;
         console.log(data);
         if (data) dispatch(loginSlice(data));
-        if (error) dispatch(logoutSlice());
+        if(error)console.log(error)
+        // if (error) dispatch(logoutSlice());
     }, [isLoading, data, error, dispatch])
 
     console.log("err",error);
     console.log("user",user);
     console.log("data",data);
 
-    if (!user && error) {
+    if (!user && error?.status === 401) {
         return <Navigate to="/auth" replace></Navigate>
     }
 

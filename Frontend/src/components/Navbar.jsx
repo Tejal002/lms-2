@@ -7,13 +7,13 @@ import { Toaster, toast } from "react-hot-toast"
 import { useEffect } from 'react';
 
 const Navbar = () => {
-    const navigate=useNavigate()
+    const navigate = useNavigate()
     const user = useSelector((state) => state.auth.user);
-    
-   
+
+
     const [logoutUser] = useLogoutUserMutation();
     const dispatch = useDispatch()
-   
+
     console.log(user);
 
     async function logoutFun() {
@@ -48,22 +48,28 @@ const Navbar = () => {
                     </div>
                     <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                         <div class="flex shrink-0 items-center">
-                            <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company" class="h-8 w-auto" />
+                            <img src="https://logodix.com/logo/1834118.png" alt="Your Company" class="h-10 w-auto" />
                         </div>
                         <div class="hidden sm:ml-6 sm:block">
-                            {(!user || user?.role === "student") ?
-                                (<div class="flex space-x-4">
-                                    <Link to="/student-dashboard" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Dashboard</Link>
+                            {
+                                !user ? (<div class="flex space-x-4">
+                                   
                                     <Link to="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</Link>
-                                    <Link to="/student-dashboard/my-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">My Courses</Link>
-                                </div>) : (
-                                <div class="flex space-x-4">
-                                    <Link to="/instructor-dashboard" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Instructor-Dashboard</Link>
-                                    <Link to="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</Link>
-                                    <Link to="/student-dashboard/my-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">My Courses</Link>
-                                    <Link to="/instructor-dashboard/create-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Create Course</Link>
-                                    <Link to="/instructor-dashboard/manage-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Manage Course</Link>
-                                </div>
+                                   
+                                </div>):
+                                user?.role === "student" ?
+                            (<div class="flex space-x-4">
+                                <Link to="/student-dashboard" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Dashboard</Link>
+                                <Link to="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</Link>
+                                <Link to="/student-dashboard/my-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">My Courses</Link>
+                            </div>) : (
+                            <div class="flex space-x-4">
+                                <Link to="/instructor-dashboard" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Instructor-Dashboard</Link>
+                                <Link to="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</Link>
+                                <Link to="/student-dashboard/my-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">My Courses</Link>
+                                <Link to="/instructor-dashboard/create-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Create Course</Link>
+                                <Link to="/instructor-dashboard/manage-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Manage Course</Link>
+                            </div>
                             )
                             }
 

@@ -1,15 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLoginUserMutation } from "../apis/authApi";
-import  {Toaster, toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { loginSlice } from "../slices/authSlice.js";
 
 export default function Login() {
 
-   const [loginUser, result]=useLoginUserMutation();
-   const dispatch=useDispatch();
-   const navigate=useNavigate();
+  const [loginUser, result] = useLoginUserMutation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
 
 
@@ -33,12 +33,12 @@ export default function Login() {
     try {
       const { Data } = await loginUser(formData).unwrap();
       if (Data) {
-       
-        const{user}=Data;
+
+        const { user } = Data;
         dispatch(loginSlice(user));
         toast.success("User Login successfully!");
         navigate("/");
-        
+
       }
     } catch (err) {
       console.log("error:", err);
@@ -50,24 +50,21 @@ export default function Login() {
 
   return (
     <>
-    <Toaster
-                position="top-center"
-                reverseOrder={false}
-            />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            alt="Your Company"
-            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-            className="mx-auto h-10 w-auto"
-          />
-          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm ">
+          <img src="https://logodix.com/logo/1834118.png" alt="Your Company" className="h-12 w-auto ml-40" />
+
+          <h2 className="mt-10  text-center text-2xl/9 font-bold tracking-tight text-gray-900">
             Sign in to your account
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleForm}  className="space-y-6">
+          <form onSubmit={handleForm} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                 Email address
