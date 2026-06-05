@@ -1,7 +1,7 @@
 import Course from "../models/course.mjs";
 import Lecture from "../models/lecture.mjs";
 import { fetchCourseByIdService } from "./courseService.mjs";
-import { fetchTranscript } from 'youtube-transcript';
+import { YoutubeTranscript } from 'youtube-transcript';
 
 export async function createLectureService(courseId, data) {
     const course = await fetchCourseByIdService(courseId);
@@ -38,6 +38,13 @@ export async function fetchLectureByIdService(id) {
 }
 
 //ai
+function extractVideoId(url) {
+    const match = url.match(
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/
+    );
+    return match?.[1] || null;
+}
+
 export async function fetchLectureByCourseIDService(courseId) {
     if (!courseId) {
         throw new Error("Course Id is not defined!");
@@ -45,39 +52,28 @@ export async function fetchLectureByCourseIDService(courseId) {
 
     const lectures = await Lecture.find({ course: courseId });
 
-    return Promise.all(
+    return Promise.allSettled(
         lectures.map(async (lec) => {
 
-            
-            if (lec.transcript?.text) {
+            if (lec.transcript?.text && lec.transcript?.fetchedAt) {
                 return lec.toObject();
             }
 
-            let transcriptText = "";
+            let transcriptText = "Transcript not available for this lecture.";
 
             try {
-               
-                const videoId = lec.videoUrl?.match(/v=([^&]+)/)?.[1];
+                const videoId = extractVideoId(lec.videoUrl);
 
                 if (!videoId) {
                     throw new Error("Invalid YouTube URL");
                 }
 
-                const transcripts = await fetchTranscript(videoId);
-
-               
-                console.log("videoId:", videoId);
-                console.log("transcripts:", transcripts);
+                const transcripts = await YoutubeTranscript.fetchTranscript(videoId);
 
                 transcriptText =
-                    transcripts?.map(t => t.text).join(" ") || "";
+                    transcripts?.map(t => t.text).join(" ")?.trim() ||
+                    "Transcript not available for this lecture.";
 
-                
-                if (!transcriptText.trim()) {
-                    transcriptText = "Transcript not available for this lecture.";
-                }
-
-               
                 await Lecture.findByIdAndUpdate(lec._id, {
                     transcript: {
                         text: transcriptText,
@@ -87,8 +83,6 @@ export async function fetchLectureByCourseIDService(courseId) {
 
             } catch (err) {
                 console.log("Transcript fetch failed:", lec._id, err.message);
-
-                transcriptText = "Transcript not available for this lecture.";
             }
 
             return {
