@@ -1,100 +1,122 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
-import { logoutSlice } from './slices/authSlice.js';
-import { useLogoutUserMutation } from './apis/authApi.js';
-import { Toaster, toast } from "react-hot-toast"
-import { useEffect } from 'react';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logoutSlice } from "./slices/authSlice.js";
+import { useLogoutUserMutation } from "./apis/authApi.js";
+import { Toaster, toast } from "react-hot-toast";
 
 const Navbar = () => {
-    const navigate = useNavigate()
-    const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const [logoutUser] = useLogoutUserMutation();
 
+  const [open, setOpen] = useState(false);
 
-    const [logoutUser] = useLogoutUserMutation();
-    const dispatch = useDispatch()
+  async function logoutFun() {
+    dispatch(logoutSlice());
+    await logoutUser();
+    toast.success("Logout successfully!");
+    navigate("/auth");
+  }
 
-    console.log(user);
+  return (
+    <nav className="bg-gray-800 w-full relative">
+      <Toaster position="top-center" />
 
-    async function logoutFun() {
-        dispatch(logoutSlice());
-        await logoutUser()
-        toast.success("Logout sucessfully!");
-        navigate("/auth");
-    }
+    
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
 
-    return (
+          {/* Mobile button */}
+          <div className="sm:hidden">
+            <button
+              onClick={() => setOpen(!open)}
+              className="p-2 text-gray-300 hover:text-white"
+            >
+              {!open ? "☰" : "✕"}
+            </button>
+          </div>
 
-
-        <nav className="relative bg-gray-800 h-20">
-            <Toaster
-                position="top-center"
-                reverseOrder={false}
+          {/* Logo */}
+          <div className="flex items-center">
+            <img
+              src="https://logodix.com/logo/1834118.png"
+              className="h-10"
+              alt="logo"
             />
-            <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                <div class="relative flex h-16 items-center justify-between">
-                    <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+          </div>
 
-                        <button type="button" command="--toggle" commandfor="mobile-menu" class="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-2 focus:-outline-offset-1 focus:outline-indigo-500">
-                            <span class="absolute -inset-0.5"></span>
-                            <span class="sr-only">Open main menu</span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 in-aria-expanded:hidden">
-                                <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-slot="icon" aria-hidden="true" class="size-6 not-in-aria-expanded:hidden">
-                                <path d="M6 18 18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                        <div class="flex shrink-0 items-center">
-                            <img src="https://logodix.com/logo/1834118.png" alt="Your Company" class="h-10 w-auto" />
-                        </div>
-                        <div class="hidden sm:ml-6 sm:block">
-                            {
-                                !user ? (<div class="flex space-x-4">
-                                   
-                                    <Link to="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</Link>
-                                   
-                                </div>):
-                                user?.role === "student" ?
-                            (<div class="flex space-x-4">
-                                <Link to="/student-dashboard" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Dashboard</Link>
-                                <Link to="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</Link>
-                                <Link to="/student-dashboard/my-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">My Courses</Link>
-                            </div>) : (
-                            <div class="flex space-x-4">
-                                <Link to="/instructor-dashboard" aria-current="page" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white">Instructor-Dashboard</Link>
-                                <Link to="/" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Home</Link>
-                                <Link to="/student-dashboard/my-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">My Courses</Link>
-                                <Link to="/instructor-dashboard/create-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Create Course</Link>
-                                <Link to="/instructor-dashboard/manage-course" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">Manage Course</Link>
-                            </div>
-                            )
-                            }
+        
+          <div className="hidden sm:flex gap-4">
+            {!user ? (
+              <Link className="text-gray-300" to="/">Home</Link>
+            ) : user.role === "student" ? (
+              <>
+                <Link to="/student-dashboard" className="text-gray-300">Dashboard</Link>
+                <Link to="/" className="text-gray-300">Home</Link>
+                <Link to="/student-dashboard/my-course" className="text-gray-300">My Courses</Link>
+              </>
+            ) : (
+              <>
+                <Link to="/instructor-dashboard" className="text-gray-300">Dashboard</Link>
+                <Link to="/" className="text-gray-300">Home</Link>
+                <Link to="/instructor-dashboard/create-course" className="text-gray-300">Create</Link>
+                <Link to="/instructor-dashboard/manage-course" className="text-gray-300">Manage</Link>
+              </>
+            )}
+          </div>
 
-                        </div>
-                    </div>
-                    <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0  gap-4">
-                        {
-                            user ?
-                                <div className='flex gap-4'>
-                                    <p className='text-amber-50'>Hi {user.firstName}</p>
-                                    <button className='text-amber-100 font-medium' onClick={logoutFun} >Logout </button>
-                                </div>
+          <div className="flex gap-4 text-white">
+            {user ? (
+              <>
+                <span>Hi {user.firstName}</span>
+                <button onClick={logoutFun}>Logout</button>
+              </>
+            ) : (
+              <Link to="/auth">Login</Link>
+            )}
+          </div>
 
-                                :
-                                <Link to={"/auth"} className='text-amber-100 font-medium'>Login </Link>
+        </div>
+      </div>
 
-                        }
+     
+      <div
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-900 text-white z-50
+        transform transition-transform duration-300 sm:hidden
+        ${open ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        <div className="p-4 flex flex-col gap-4">
 
-                    </div>
-                </div>
-            </div>
+          {!user ? (
+            <Link onClick={() => setOpen(false)} to="/">Home</Link>
+          ) : user.role === "student" ? (
+            <>
+              <Link onClick={() => setOpen(false)} to="/home">Home</Link>
+            <Link onClick={() => setOpen(false)} to="/student-dashboard">Dashboard</Link>
+              <Link onClick={() => setOpen(false)} to="/student-dashboard/my-course">My Courses</Link>
+            </>
+          ) : (
+            <>
+              <Link onClick={() => setOpen(false)} to="/instructor-dashboard">Dashboard</Link>
+              <Link onClick={() => setOpen(false)} to="/instructor-dashboard/create-course">Create</Link>
+              <Link onClick={() => setOpen(false)} to="/instructor-dashboard/manage-course">Manage</Link>
+            </>
+          )}
 
-        </nav>
+        </div>
+      </div>
 
-    )
-}
+      {/* Overlay */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          className="fixed inset-0 bg-black/40 sm:hidden"
+        />
+      )}
+    </nav>
+  );
+};
 
-export default Navbar
+export default Navbar;

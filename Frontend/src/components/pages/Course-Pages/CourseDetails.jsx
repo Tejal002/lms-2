@@ -52,7 +52,7 @@ const CourseDetails = () => {
           error ? (<p>Something went wrong!</p>) :
             data ?
               <div>
-                <div className='flex m-8 p-2 gap-4'>
+                <div className='flex m-8 p-2 gap-4 flex-wrap'>
                   <div className='w-3/4 '>
                     <div className='flex flex-col bg-gray-200 w-full items-start gap-2 p-8 rounded-3xl'>
                       <h3 className='text-3xl font-semibold'>{data.Data.course.title}</h3>
@@ -60,9 +60,9 @@ const CourseDetails = () => {
                       <p className='font-semibold'>Created by: {data.Data.course.instructor.firstName} {data.Data.course.instructor.lastName}</p>
                       <p className='font-semibold'>Total Students: {data.Data.course.totalStudents}</p>
                     </div>
-                    <div className='flex flex-col w-full items-start gap-2 p-8 rounded-3xl'>
+                    <div className='flex flex-col w-full items-start gap-2 py-8 rounded-3xl'>
                       <h3 className='font-semibold text-2xl'>Course Content</h3>
-                      <div className=' w-full'>
+                      <div className='w-full'>
                         <LectureTable lecture={data.Data.course.lectures||[]}/>
                       </div>
                     </div>

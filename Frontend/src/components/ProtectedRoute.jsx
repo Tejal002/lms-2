@@ -5,39 +5,45 @@ import { loginSlice, logoutSlice } from './slices/authSlice';
 import { Navigate } from 'react-router-dom';
 
 export function ProtectedRoute({ children }) {
-    const dispatch = useDispatch()
-   const user = useSelector((state) => state.auth.user);
-    console.log(user)
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.auth.user);
+
     const { data, error, isLoading } = useCurrentUserQuery(undefined, {
         skip: !user,
-        refetchOnMountOrArgChange: true
+        refetchOnMountOrArgChange: true,
     });
 
     useEffect(() => {
         if (isLoading) return;
-        console.log(data);
-        if (data) dispatch(loginSlice(data));
-        if(error)console.log(error)
-        // if (error) dispatch(logoutSlice());
-    }, [isLoading, data, error, dispatch])
 
-    console.log("err",error);
-    console.log("user",user);
-    console.log("data",data);
+       
+        if (data) {
+            dispatch(loginSlice(data));
+        }
 
-    if (!user && error?.status === 401) {
-        return <Navigate to="/auth" replace></Navigate>
-    }
+       
+        if (error?.status === 401) {
+            dispatch(logoutSlice());
+        }
 
+    }, [data, error, isLoading, dispatch]);
+
+   
     if (isLoading) {
-        return <p>Checking session.....</p>
+        return <p>Checking session.....</p>;
     }
 
-    if (error) {
-        return <Navigate to="/auth" replace></Navigate>
+  
+    if (!user) {
+        return <Navigate to="/auth" replace />;
     }
 
-    return children
+    
+    if (error?.status === 401) {
+        return <Navigate to="/auth" replace />;
+    }
+
+    return children;
 }
 
 

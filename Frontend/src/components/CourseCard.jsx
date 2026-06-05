@@ -11,14 +11,14 @@ console.log(progress)
   
   const navigate=useNavigate();
   return (
-    <div className='flex flex-col w-1/4 shadow-lg gap-4 rounded-2xl p-1' style={{width:myCourse?"300px":null}}>
-        <div className='s w-full h-2/3'>
+    <div className='flex flex-col min-w-75  w-1/4 shadow-lg gap-4 rounded-2xl p-1' style={{width:myCourse?"300px":null}}>
+        <div className='w-full h-2/3'>
             <img 
             className='rounded-2xl h-full w-full'
             src={course.thumbnail.url} alt="course-thumbnail" />
         </div>
         
-        <div className='flex justify-around'>
+        <div className='flex justify-around flex-wrap'>
              <h3 className='text-xl font-semibold '>{course.title}</h3>
              <button className='bg-black text-amber-50 px-2 rounded-xl text-sm'>Featured</button>
         </div>
