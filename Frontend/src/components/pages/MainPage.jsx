@@ -33,7 +33,7 @@ const MainPage = () => {
         <div className='overflow-hidden'>
             <Navbar />
 
-            <div className='w-full flex flex-col gap-4 my-8 mx-16 p-2'>
+            <div className='w-full flex flex-col gap-4 my-8 mx-4 p-2'>
 
                 <p className='text-md text-slate-500 font-semibold'>Learn at your pace</p>
 

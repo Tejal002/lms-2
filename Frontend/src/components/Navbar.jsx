@@ -93,7 +93,7 @@ const Navbar = () => {
             <Link onClick={() => setOpen(false)} to="/">Home</Link>
           ) : user.role === "student" ? (
             <>
-              <Link onClick={() => setOpen(false)} to="/home">Home</Link>
+              <Link onClick={() => setOpen(false)} to="/">Home</Link>
             <Link onClick={() => setOpen(false)} to="/student-dashboard">Dashboard</Link>
               <Link onClick={() => setOpen(false)} to="/student-dashboard/my-course">My Courses</Link>
             </>
