@@ -72,7 +72,7 @@ const CoursePlayer = () => {
             toast.error("Instructor had not uploaded lectures yet!!");
         }
         if (data?.Data?.lectures?.length) {
-            setCurrentLec(data.Data.lectures[0]);
+            setCurrentLec(data.Data.lectures[0].value);
         }
     }, [data]);
 
@@ -172,14 +172,14 @@ const CoursePlayer = () => {
                             <button
                                 key={index}
                                 className='bg-black rounded-2xl w-3/4 flex flex-col justify-center items-start font-medium text-sm p-2'
-                                onClick={() => setCurrentLec(item)
+                                onClick={() => setCurrentLec(item.value)
 
                                 }>
                                 <div className='text-amber-100 flex items-center gap-2'>
                                     <i className="fa-regular fa-circle-play "></i>
-                                    <p className=''>{index + 1}.{item.title}</p>
+                                    <p className=''>{index + 1}.{item.value.title}</p>
                                 </div>
-                                <p className='text-gray-300 pl-6'>{item.duration} min</p>
+                                <p className='text-gray-300 pl-6'>{item.value.duration} min</p>
                             </button>
                         ))
                     }

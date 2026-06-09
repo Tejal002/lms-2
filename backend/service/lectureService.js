@@ -1,7 +1,7 @@
 import Course from "../models/course.mjs";
 import Lecture from "../models/lecture.mjs";
 import { fetchCourseByIdService } from "./courseService.mjs";
-import { YoutubeTranscript } from 'youtube-transcript';
+import { fetchTranscript } from 'youtube-transcript';
 
 export async function createLectureService(courseId, data) {
     const course = await fetchCourseByIdService(courseId);
@@ -54,25 +54,27 @@ export async function fetchLectureByCourseIDService(courseId) {
 
     return Promise.allSettled(
         lectures.map(async (lec) => {
+            console.log(lec);
 
             if (lec.transcript?.text && lec.transcript?.fetchedAt) {
                 return lec.toObject();
             }
 
-            let transcriptText = "Transcript not available for this lecture.";
+            let transcriptText = "";
 
             try {
-                const videoId = extractVideoId(lec.videoUrl);
+                // const videoId =await  extractVideoId(lec.videoUrl);
 
-                if (!videoId) {
-                    throw new Error("Invalid YouTube URL");
-                }
+                // if (!videoId) {
+                //     throw new Error("Invalid YouTube URL");
+                // }
 
-                const transcripts = await YoutubeTranscript.fetchTranscript(videoId);
+                const transcripts = await fetchTranscript(lec.videoUrl);
+                console.log(transcripts)
 
                 transcriptText =
                     transcripts?.map(t => t.text).join(" ")?.trim() ||
-                    "Transcript not available for this lecture.";
+                    "Transcript is not available for this lecture.";
 
                 await Lecture.findByIdAndUpdate(lec._id, {
                     transcript: {

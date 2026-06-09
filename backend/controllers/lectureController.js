@@ -68,7 +68,7 @@ export async function fetchLectureByCourseID(req, res) {
         const lectures = await fetchLectureByCourseIDService(courseId);
 
 
-
+        res.set("Cache-Control", "no-store");
         res.status(200).send({
             Data: {
                 message: "lecture fetched Successfully",
