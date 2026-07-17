@@ -1,26 +1,22 @@
 import React from 'react'
 
-const LectureTable = ({ lecture }) => {
+const   LectureTable = ({ lecture }) => {
     console.log(lecture)
     return (
 
         <table className="w-full shadow-md">
-            <thead>
-                <tr>
-                    <th className="px-2 text-left">Lecture</th>
-                </tr>
-            </thead>
+           
 
-            <tbody>
+            <tbody className='border border-gray-400'>
                 {lecture ? (
                     lecture.map((lec) => (
                         <tr
-                            key={lec.id}
-                            className="bg-white hover:bg-gray-50 hover:shadow-md transition-all"
-                        >
+                            key={lec._id}
+                            className="bg-white hover:bg-gray-50 hover:shadow-md transition-all border border-gray-300">
+
                             <td className="p-3">
                                 <div className="flex flex-col gap-1">
-                                   
+    
                                     <div className="font-medium text-base">
                                         {lec.title}
                                     </div>

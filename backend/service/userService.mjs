@@ -16,7 +16,7 @@ export async function createUserService(user) {
 }
 
 function getUserByEmail(email) {
-    return User.findOne({email});
+    return User.findOne({email}).select("-password");
 }
 
 function updateUser(key,value){

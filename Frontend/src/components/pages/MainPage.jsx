@@ -3,10 +3,14 @@ import Navbar from '../Navbar'
 import Skeleton from './Utility-Skeleton/Skeleton'
 import CourseCard from '../CourseCard'
 import { useFetchCoursesQuery } from '../apis/courseApi'
+import MainPageCard from '../Card/MainPageCard.jsx'
 
 const MainPage = () => {
 
     const { status, error, data } = useFetchCoursesQuery();
+    console.log(error)
+    console.log(status)
+    console.log(data)
 
     const [searchTerm, setSearchTerm] = useState("");
 
@@ -33,7 +37,7 @@ const MainPage = () => {
         <div className='overflow-hidden'>
             <Navbar />
 
-            <div className='w-full flex flex-col gap-4 my-8 mx-4 p-2'>
+            <div className='w-full flex flex-col gap-4 my-8 mx-4 p-2 px-12'>
 
                 <p className='text-md text-slate-500 font-semibold'>Learn at your pace</p>
 
@@ -54,10 +58,21 @@ const MainPage = () => {
                     className='w-1/3 bg-slate-200 focus:bg-white focus:shadow-lg focus:ring-2 focus:ring-slate-400 p-2 rounded-2xl border-none outline-none'
                 />
 
-                <div className='flex gap-4 flex-wrap'>
+                <div className='flex flex-wrap gap-12'>
 
                     {/* LOADING */}
-                    {status === "loading" && <Skeleton />}
+                    {status === "pending" && <div className='flex flex-col gap-4 w-screen h-screen'>
+                        <div className='flex'>
+                            <Skeleton />
+                            <Skeleton />
+                            <Skeleton />
+                        </div>
+                        <div className='flex'>
+                            <Skeleton />
+                            <Skeleton />
+                            <Skeleton />
+                        </div>
+                    </div>}
 
                     {/* ERROR */}
                     {status === "error" && (
@@ -67,7 +82,10 @@ const MainPage = () => {
                     {/* DATA (WITH SEARCH) */}
                     {status === "fulfilled" &&
                         filteredCourses.map((course) => (
-                            <CourseCard key={course._id} course={course} />
+                           
+                                <MainPageCard key={course._id} course={course} />
+                           
+
                         ))
                     }
 

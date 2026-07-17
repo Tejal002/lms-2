@@ -41,8 +41,8 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <img
-              src="https://logodix.com/logo/1834118.png"
-              className="h-10"
+              src="https://kuliahamerika.com/wp-content/uploads/2024/02/4e5a7376-2025-4190-a3a2-61ddf9b1f705.webp"
+              className="h-30 rounded-2xl"
               alt="logo"
             />
           </div>
@@ -71,7 +71,7 @@ const Navbar = () => {
             {user ? (
               <>
                 <span>Hi {user.firstName}</span>
-                <button onClick={logoutFun}>Logout</button>
+                <button className="cursor-pointer" onClick={logoutFun}>Logout</button>
               </>
             ) : (
               <Link to="/auth">Login</Link>

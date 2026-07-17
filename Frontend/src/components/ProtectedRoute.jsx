@@ -13,6 +13,7 @@ export function ProtectedRoute({ children }) {
         refetchOnMountOrArgChange: true,
     });
 
+    console.log(data, error, isLoading );
     useEffect(() => {
         if (isLoading) return;
 
@@ -22,7 +23,7 @@ export function ProtectedRoute({ children }) {
         }
 
        
-        if (error?.status === 401) {
+        if (error?.status === 401||error?.status === 500) {
             dispatch(logoutSlice());
         }
 
@@ -39,7 +40,8 @@ export function ProtectedRoute({ children }) {
     }
 
     
-    if (error?.status === 401) {
+    if (error?.status === 401||error?.status === 500) {
+        
         return <Navigate to="/auth" replace />;
     }
 

@@ -8,19 +8,20 @@ import EditCourseForm from './EditCourseForm.jsx'
 const ManageCourse = () => {
 
     const [courseID, setCourseID] = useState(null)
-    const { data, error, isLoading,refetch } = useFetchMyCourseQuery({
+    const { data, isError, isLoading,refetch } = useFetchMyCourseQuery({
         undefined,
         refetchOnMountOrArgChange: true
     });
     const [deleteCourse,result]=useDeleteCourseByIdMutation();
+    console.log(useFetchMyCourseQuery())
+    console.log(data)
     
-    console.log(error);
     const [openCreateLec, setOpenCreateLec] = useState(false);
     const [openEditLec, setOpenEditLec] = useState(false);
     const[openEditCourse,setOpenEditCourse]=useState(false);
 
 
-    if (error) {
+    if (isError) {
         toast.error(error.data.Error.info)
     }
 
@@ -45,7 +46,7 @@ const ManageCourse = () => {
         console.log(result);
     }
 
-
+    
     return (
         <>
             <Toaster
@@ -80,7 +81,7 @@ const ManageCourse = () => {
                                     </thead>
                                     <tbody>
                                         {
-                                            isLoading ? (<tr><td colSpan={4}>Loading...</td></tr>) : error ? (<tr><td colSpan={4}>Something went wrong!!!</td></tr>) :
+                                            isLoading ? (<tr><td colSpan={4}>Loading...</td></tr>) : isError ? (<tr><td colSpan={4}>Something went wrong!!!</td></tr>) :
                                                 data ? (
                                                     data?.Data?.courses?.map((item) => (
 

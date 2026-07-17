@@ -8,7 +8,10 @@ import {  useNavigate } from 'react-router-dom'
 const EditLec = ({ courseID }) => {
     const [edit, setEdit] = useState(false);
     const[lectureId,setLectureId]=useState(null);
-    const { data, error, isLoading, refetch } = useFetchLecByCourseIdQuery(courseID);
+    const { data, isError, isLoading, refetch } = useFetchLecByCourseIdQuery(courseID);
+    console.log( useFetchLecByCourseIdQuery(courseID))
+    console.log(data)
+    console.log(isError)
     const [deleteLec, result] = useDeleteLectureMutation();
 
     async function handleDeleteLec(lectureId) {
@@ -52,23 +55,22 @@ const EditLec = ({ courseID }) => {
                                 </thead>
                                 <tbody>
                                     {
-                                        isLoading ? (<tr><td colSpan={4}>Loading...</td></tr>) : error ? (<tr><td colSpan={4}>Something went wrong-here</td></tr>) : data ?
+                                        isLoading ? (<tr><td colSpan={4}>Loading...</td></tr>) : isError ? (<tr><td colSpan={4}>Something went wrong-here</td></tr>) : data ?
                                             data?.Data?.lectures?.map((item) => (
-
-                                                <tr className='border-t border-gray-300' key={item._id}>
+                                             <tr className='border-t border-gray-300' key={item.value._id}>
                                                     <td className='text-md font-semibold py-2'>
                                                         <div className='flex flex-col'>
-                                                            <span>{item.title}</span>
-                                                            <p className='text-slate-600 font-light'>{item.description}</p>
+                                                            <span>{item.value.title}</span>
+                                                            <p className='text-slate-600 font-light'>{item.value.description}</p>
                                                         </div>
 
                                                     </td>
-                                                    <td>{item.duration}</td>
+                                                    <td>{item.value.duration}</td>
 
                                                     <td><div className='flex gap-4 justify-end'>
 
-                                                        <button className='p-1 bg-gray-200 rounded-2xl' onClick={() => handleEditLec(item._id)}><i className="fa-regular fa-pen-to-square text-3xs"></i></button>
-                                                        <button className='p-1 bg-gray-200 rounded-2xl' onClick={() => handleDeleteLec(item._id)}><i className="fa-solid fa-trash text-3xs text-red-600"></i></button>
+                                                        <button className='p-1 bg-gray-200 rounded-2xl' onClick={() => handleEditLec(item.value._id)}><i className="fa-regular fa-pen-to-square text-3xs"></i></button>
+                                                        <button className='p-1 bg-gray-200 rounded-2xl' onClick={() => handleDeleteLec(item.value._id)}><i className="fa-solid fa-trash text-3xs text-red-600"></i></button>
                                                     </div></td>
                                                 </tr>
 

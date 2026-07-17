@@ -54,7 +54,7 @@ const InstructorDashboardDetails = () => {
                         "No courses are found!"
                         :
                         instructorCourses.map((course)=>(
-                            <CreatedCourseDetails course={course}/>
+                            <CreatedCourseDetails key={course._id} course={course}/>
                         ))    
                 }
                 </div>

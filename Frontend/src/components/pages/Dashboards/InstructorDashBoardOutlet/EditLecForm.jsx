@@ -9,7 +9,9 @@ const EditLecForm = ({ lectureId,courseID }) => {
     const[editLec,result]=useUpdateLectureMutation();
     const navigate=useNavigate();
 
-    const { data, error, isLoading } = useFetchLectureByIdQuery(lectureId);
+    const { data, error, isLoading } = useFetchLectureByIdQuery(lectureId,{
+        refetchOnMountOrArgChange:true,
+    });
     console.log(data?.Data?.lecture);
     console.log(error);
     console.log(lectureId)
@@ -45,12 +47,14 @@ const EditLecForm = ({ lectureId,courseID }) => {
     async function handleForm(e) {
         e.preventDefault();
         const updateField={...formData};
-        const result=await editLec({courseID,lectureId,updateField})
-        if(result.data.Data){
-            toast.success(result.data.Data.message);
+        console.log(updateField)
+        const result=await editLec({courseID,lectureId,updateField}).unwrap();
+       
+        if(result.Data){
+            toast.success(result.Data.message);
              navigate("/instructor-dashboard");
         }else{
-             toast.success(result.data.Error.info);
+             toast.success(result.Error.info);
         }
        
     }
