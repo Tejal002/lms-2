@@ -31,11 +31,11 @@ export async function loginService(credential) {
         throw new Error("Credentials required");
     }
 
-    const user = await getUserByEmail(email);
+    const user = await User.findOne({email});
     if(!user){
          throw new Error("User does not exist!");
     }
-    console.log(user);
+    console.log("user:",user);
     const result = await compareFun(password, user.password);
     console.log(result);
 

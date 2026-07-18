@@ -24,6 +24,10 @@ const courseSchema = new Schema({
         url: String,
         fileName: String
     },
+    price:{
+        type:Number,
+        required:true
+    },
     totalStudents: {
         type: Number,
         default: 0

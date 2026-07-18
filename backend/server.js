@@ -6,6 +6,7 @@ import courseRoutes from "./routes/courseRoutes.js"
 import lectureRoutes from "./routes/lectureRoutes.js"
 import cookieParser from "cookie-parser";
 import enrollmentRoutes from "./routes/enrollmentRoutes.js";
+import paymentRoutes from './routes/paymentRoutes.js'
 import { connect, disconnect } from "./db.js";
 
 const app = express();
@@ -22,6 +23,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/lectures", lectureRoutes);
 app.use("/api/enrollment", enrollmentRoutes);
+app.use('/api/payment',paymentRoutes)
 
 app.use((err, req, res, next) => {
     if (err) {
@@ -45,6 +47,6 @@ app.listen(process.env.PORT, async (req, res) => {
 process.on("SIGINT", async () => {
     console.log(chalk.redBright("Received SIGNINT..!Shutting down server grcefully!"));
     await disconnect();
-    app.close();
+    
     process.exit()
 })

@@ -7,6 +7,7 @@ import { useCreateEnrollmentMutation, useGetEnrollmentByCourseQuery } from '../.
 import { useDispatch } from 'react-redux';
 import { Toaster, toast } from "react-hot-toast"
 import LectureTable from './LectureTable.jsx';
+import { useCreateOrderMutation, useVerifyPaymentMutation } from '../../apis/paymentApi.js';
 
 const CourseDetails = () => {
   const navigate = useNavigate();
@@ -17,12 +18,89 @@ const CourseDetails = () => {
 
   const { data, isError, isLoading } = useFetchCourseByIdQuery(courseId);
   const { status } = useGetEnrollmentByCourseQuery(courseId);
+   const [createOrder]=useCreateOrderMutation();
+   const [verifyPayment]=useVerifyPaymentMutation();
   console.log(status)
   const [createEnroll, result] = useCreateEnrollmentMutation();
   console.log(data)
   console.log(isError)
   console.log(useFetchCourseByIdQuery(courseId))
 
+
+  const handleBuyCourse = async () => {
+  try {
+    // Create Razorpay Order
+    const response = await createOrder({
+      amount: data?.Data?.course?.price,
+      
+    }).unwrap();  
+    console.log(response)
+
+    const order = response.order;
+
+    const options = {
+      key: import.meta.env.VITE_RAZORPAY_KEY,
+
+      amount: order.amount,
+
+      currency: order.currency,
+
+      name: "My LMS",
+
+      description: data?.Data?.course?.title,
+
+      order_id: order.id,
+
+      prefill: {
+        name:"",
+        email: "",
+      },
+
+      theme: {
+        color: "#0FA5DF",
+      },
+
+      handler: async function (paymentResponse) {
+        try {
+          const verifyRes = await verifyPayment({
+            razorpay_order_id: paymentResponse.razorpay_order_id,
+            razorpay_payment_id: paymentResponse.razorpay_payment_id,
+            razorpay_signature: paymentResponse.razorpay_signature,
+            courseId:  data?.Data?.course?._id,
+          }).unwrap();
+
+          console.log(verifyRes)
+
+          toast.success(
+            verifyRes.message || "Payment Successful"
+          );
+
+          if(verifyRes.success){
+            handleEnroll(data?.Data?.course?._id)
+          }
+
+          // Optional: navigate("/my-learning");
+        } catch (err) {
+          console.log(err);
+          toast.error("Payment Verification Failed");
+        }
+      },
+    };
+
+    const razorpay = new window.Razorpay(options);
+
+    razorpay.on("payment.failed", function (response) {
+      console.log(response.error);
+
+      toast.error(response.error.description);
+    });
+
+    razorpay.open();
+  } catch (err) {
+    console.log(err);
+    toast.error(err.message);
+  }
+};
 
   async function handleEnroll(id) {
 
@@ -43,7 +121,7 @@ const CourseDetails = () => {
     }
   }
 
-  console.log(data?.Data?.course);
+
 
   return (
 
@@ -76,6 +154,7 @@ const CourseDetails = () => {
                       <p className='text-gray-500'>{data.Data.course.description}</p>
                       <p className='font-semibold'>Created by: {data.Data.course.instructor.firstName} {data.Data.course.instructor.lastName}</p>
                       <p className='font-semibold'>Total Students: {data.Data.course.totalStudents}</p>
+                      <p className='font-semibold'>Total Price: {data.Data.course.price}</p>
                     </div>
                     <div className='flex flex-col w-full items-start gap-2 py-8 rounded-3xl'>
                       <h3 className='font-semibold text-2xl'>Course Content</h3>
@@ -94,11 +173,13 @@ const CourseDetails = () => {
                       <h4 className='font-semibold text-xl text-left'>Start Learning</h4>
                       <p className='text-slate-400'>Enroll to unlock the full lecture player and progress tracking</p>
                       {
-                        status == 'fulfilled' ? <button className='bg-black rounded-2xl text-white p-2 w-3/4'>Already Enrolled</button>
-                          : <button className='bg-black rounded-2xl text-white p-2 w-3/4' onClick={() => handleEnroll(data?.Data?.course?._id)} >{result.isLoading ? "Enrolling" : "Enroll now"}</button>
+                        status == 'fulfilled' ? <button className='bg-slate-400 rounded-2xl text-white p-2 w-3/4' disabled>Already Enrolled</button>
+                          : <button className='bg-black rounded-2xl text-white p-2 w-3/4' onClick={handleBuyCourse} >{result.isLoading ? "Enrolling" : "Enroll now"}</button>
                       }
 
-                      <button className='bg-slate-400 rounded-2xl text-white p-2 w-3/4'>Preview player</button>
+                      
+
+                     
                     </div>
                   </div>
                 </div>
